@@ -1,7 +1,7 @@
-from rest_framework import viewsets, generics, status
+from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import AllowAny
 from django.shortcuts import get_object_or_404
 from store.models import Category, Product, CartItem, Order, OrderItem
 from .serializers import (
@@ -30,11 +30,10 @@ class ProductViewSet(viewsets.ReadOnlyModelViewSet):
         return queryset
 
 # API для корзины
-class CartViewSet(viewsets.ViewSet):
+class CartViewSet(viewsets.GenericViewSet):
     permission_classes = [AllowAny]
     
     def get_session_id(self, request):
-        # Получаем или создаём ID сессии для неавторизованного пользователя
         session_id = request.session.session_key
         if not session_id:
             request.session.create()
@@ -42,14 +41,12 @@ class CartViewSet(viewsets.ViewSet):
         return session_id
     
     def list(self, request):
-        # Получить все товары в корзине
         session_id = self.get_session_id(request)
         cart_items = CartItem.objects.filter(session_id=session_id)
         serializer = CartItemSerializer(cart_items, many=True)
         return Response(serializer.data)
     
     def create(self, request):
-        # Добавить товар в корзину
         session_id = self.get_session_id(request)
         product_id = request.data.get('product_id')
         quantity = request.data.get('quantity', 1)
@@ -70,7 +67,6 @@ class CartViewSet(viewsets.ViewSet):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     
     def destroy(self, request, pk=None):
-        # Удалить товар из корзины
         session_id = self.get_session_id(request)
         cart_item = get_object_or_404(CartItem, id=pk, session_id=session_id)
         cart_item.delete()
@@ -78,7 +74,6 @@ class CartViewSet(viewsets.ViewSet):
     
     @action(detail=False, methods=['put'])
     def update_quantity(self, request):
-        # Обновить количество товара
         session_id = self.get_session_id(request)
         cart_item_id = request.data.get('cart_item_id')
         quantity = request.data.get('quantity')
@@ -92,28 +87,27 @@ class CartViewSet(viewsets.ViewSet):
     
     @action(detail=False, methods=['delete'])
     def clear(self, request):
-        # Очистить всю корзину
         session_id = self.get_session_id(request)
         CartItem.objects.filter(session_id=session_id).delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 # API для заказов
-class OrderViewSet(viewsets.ModelViewSet):
+class OrderViewSet(viewsets.GenericViewSet):
     serializer_class = OrderSerializer
     permission_classes = [AllowAny]
     
     def get_queryset(self):
-        # Если пользователь авторизован — показываем его заказы
         if self.request.user.is_authenticated:
             return Order.objects.filter(user=self.request.user)
-        # Если не авторизован — показываем заказы по сессии (упрощённо)
         return Order.objects.none()
     
+    def list(self, request):
+        serializer = OrderSerializer(self.get_queryset(), many=True)
+        return Response(serializer.data)
+    
     def create(self, request):
-        # Создать новый заказ
         serializer = OrderCreateSerializer(data=request.data)
         if serializer.is_valid():
-            # Получаем корзину
             session_id = request.session.session_key
             if not session_id:
                 request.session.create()
@@ -124,7 +118,6 @@ class OrderViewSet(viewsets.ModelViewSet):
             if not cart_items.exists():
                 return Response({'error': 'Корзина пуста'}, status=status.HTTP_400_BAD_REQUEST)
             
-            # Создаём заказ
             order = Order.objects.create(
                 user=request.user if request.user.is_authenticated else None,
                 full_name=serializer.validated_data['full_name'],
@@ -135,7 +128,6 @@ class OrderViewSet(viewsets.ModelViewSet):
             )
             
             total = 0
-            # Создаём позиции заказа
             for cart_item in cart_items:
                 OrderItem.objects.create(
                     order=order,
@@ -148,9 +140,13 @@ class OrderViewSet(viewsets.ModelViewSet):
             order.total_amount = total
             order.save()
             
-            # Очищаем корзину
             cart_items.delete()
             
             return Response(OrderSerializer(order).data, status=status.HTTP_201_CREATED)
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def retrieve(self, request, pk=None):
+        order = get_object_or_404(Order, id=pk)
+        serializer = OrderSerializer(order)
+        return Response(serializer.data)

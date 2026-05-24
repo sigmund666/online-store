@@ -1,0 +1,42 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+</head>
+<body>
+    {% extends "shop/base.html" %}
+
+    {% block title %} Корзина{% endblock %}
+
+    {% block content %}
+    <h2>🛒 Корзина</h2>
+    {% if cart_items %}
+    <table>
+        <tr>
+            <th>Товар</th>
+            <th>Кол-во</th>
+            <th>Сумма</th>
+            <th></th>
+        </tr>
+        {% for item in cart_items %}
+        <tr>
+            <td>{{ item.product.name }}</td>
+            <td>{{ item.quantity }}</td>
+            <td>{{ item.cost }} ₽</td>
+            <td>
+                <a href="{% url 'shop:cart_remove' item.product.id %}">Удалить</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <p><strong>Итого: {{ total }} ₽</strong></p>
+    <a href="{% url 'shop:order_create' %}">Оформить заказ</a>
+    {% else %}
+    <p>Корзина пуста.</p>
+    {% endif %}
+    {% endblock %}
+
+</body>
+</html>

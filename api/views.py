@@ -1,8 +1,9 @@
-from rest_framework import viewsets, status
+from rest_framework import viewsets, status, filters
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 from django.shortcuts import get_object_or_404
+from django_filters.rest_framework import DjangoFilterBackend  
 from store.models import Category, Product, CartItem, Order, OrderItem
 from .serializers import (
     CategorySerializer, ProductSerializer, CartItemSerializer,
@@ -20,6 +21,8 @@ class ProductViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Product.objects.filter(is_active=True)
     serializer_class = ProductSerializer
     permission_classes = [AllowAny]
+    filter_backends = [filters.SearchFilter]  # добавляем поиск
+    search_fields = ['name', 'description']   # по каким полям искать
     
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -28,7 +31,7 @@ class ProductViewSet(viewsets.ReadOnlyModelViewSet):
         if category_id:
             queryset = queryset.filter(category_id=category_id)
         return queryset
-
+    
 # API для корзины
 class CartViewSet(viewsets.GenericViewSet):
     permission_classes = [AllowAny]

@@ -85,6 +85,38 @@ class CartViewSet(viewsets.GenericViewSet):
         serializer = CartItemSerializer(cart_item)
         return Response(serializer.data)
     
+    @action(detail=False, methods=['patch'])
+    def update_item(self, request):
+        """Обновить количество конкретного товара в корзине"""
+        session_id = self.get_session_id(request)
+        cart_item_id = request.data.get('cart_item_id')
+        quantity = request.data.get('quantity')
+        
+        if not cart_item_id or quantity is None:
+            return Response(
+                {'error': 'Не указаны cart_item_id или quantity'}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        try:
+            quantity = int(quantity)
+            if quantity <= 0:
+                # Если количество 0 или меньше — удаляем товар
+                cart_item = get_object_or_404(CartItem, id=cart_item_id, session_id=session_id)
+                cart_item.delete()
+                return Response(status=status.HTTP_204_NO_CONTENT)
+            
+            cart_item = get_object_or_404(CartItem, id=cart_item_id, session_id=session_id)
+            cart_item.quantity = quantity
+            cart_item.save()
+            serializer = CartItemSerializer(cart_item)
+            return Response(serializer.data)
+        except ValueError:
+            return Response(
+                {'error': 'Quantity должен быть числом'}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+    
     @action(detail=False, methods=['delete'])
     def clear(self, request):
         session_id = self.get_session_id(request)

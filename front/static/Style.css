@@ -1,0 +1,356 @@
+﻿
+/*  index    начало и конец  */
+
+.pp {
+    background: #eabbe8a1;
+    color: #fff;
+}
+
+.ppp {
+    color: #9c638d;
+}
+
+
+/*  index    баннер  */
+
+.banner {
+    display: flex;
+    gap: 40px;
+    padding: 40px;
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    align-items: center;
+}
+
+.banner-image img {
+    width: 420px;
+    height: 420px;
+    object-fit: cover;
+    border-radius: 20px;
+}
+
+.banner-info {
+    max-width: 450px;
+}
+
+.banner-title {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.banner-price {
+    font-size: 26px;
+    font-weight: 600;
+    color: #ff4d4d;
+    margin-bottom: 20px;
+}
+
+.size-selector p {
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.add-to-cart {
+    margin-top: 25px;
+    padding: 14px 25px;
+    background: #9c638d;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+    .add-to-cart:hover {
+        background: #333;
+    }
+
+
+/*  index    популярные товары  */
+
+.popular {
+    margin: 40px 0;
+}
+
+    .product-carousel h2 {
+        margin-bottom: 20px;
+        font-size: 28px;
+    }
+
+.product-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 15px;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    transition: 0.3s;
+}
+
+    .product-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .product-card img {
+        width: 100%;
+        height: 220px;
+        object-fit: cover;
+        border-radius: 10px;
+    }
+
+    .product-card .price {
+        font-size: 18px;
+        font-weight: 600;
+        margin: 10px 0;
+    }
+
+    .product-card .btn {
+        display: inline-block;
+        padding: 10px 18px;
+        background: #000;
+        color: #fff;
+        border-radius: 8px;
+        text-decoration: none;
+        transition: 0.2s;
+    }
+
+        .product-card .btn:hover {
+            background: #333;
+        }
+
+.tt {
+    margin-top: 25px;
+    padding: 14px 25px;
+    background: #9c638d;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.swiper-button-prev,
+.swiper-button-next {
+    color: #9c638d;
+}
+
+
+/*  index   кнопка  фильтрация  */
+
+.filter-open-btn {
+    padding: 12px 20px;
+    background: #9c638d;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-bottom: 20px;
+    margin-right: 50px;
+}
+
+/*  index    фильтрация  */
+
+.filter-modal {
+    display: none;
+    position: fixed;
+    z-index: 999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.55);
+    justify-content: center;
+    align-items: center;
+}
+
+.filter-content {
+    background: #fff;
+    color: #9c638d;
+    padding: 30px;
+    width: 400px;
+    border-radius: 12px;
+    position: relative;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.filter-close {
+    position: absolute;
+    top: 12px;
+    right: 15px;
+    font-size: 26px;
+    cursor: pointer;
+}
+
+.filter-content label {
+    display: block;
+    margin-top: 15px;
+    font-weight: 600;
+}
+
+.filter-content input,
+.filter-content select {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+.apply-btn {
+    margin-top: 20px;
+    width: 100%;
+    padding: 12px;
+    background: #9c638d;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+
+/*  index    категории  */
+
+.categories {
+    margin: 50px 0;
+}
+
+    .main-categories h2 {
+        font-size: 28px;
+        margin-bottom: 25px;
+    }
+
+.categories-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 25px;
+}
+
+.category-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background: #fff;
+    border-radius: 14px;
+    text-decoration: none;
+    color: #000;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    transition: 0.3s;
+}
+
+    .category-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 6px 25px rgba(0,0,0,0.12);
+    }
+
+.category-image img {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 12px;
+    margin-bottom: 15px;
+}
+
+.category-name {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+
+
+/*  list  */
+
+.search-bar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+
+    .search-bar input {
+        flex: 1;
+        padding: 10px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+    }
+
+.category-filter {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+    .category-filter a {
+        padding: 8px 14px;
+        background: #f3f3f3;
+        border-radius: 8px;
+        text-decoration: none;
+        color: #000;
+    }
+
+        .category-filter a.active {
+            background: #000;
+            color: #fff;
+        }
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 25px;
+}
+
+.product-card {
+    background: #fff;
+    padding: 15px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+}
+
+    .product-card img {
+        width: 100%;
+        height: 220px;
+        object-fit: cover;
+        border-radius: 10px;
+    }
+
+.price {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.stock {
+    color: #777;
+    margin-bottom: 10px;
+}
+
+.pagination {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.poisk {
+    padding: 12px 20px;
+    background: #9c638d;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}

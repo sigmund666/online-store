@@ -54,8 +54,6 @@ class CartViewSet(viewsets.GenericViewSet):
         return Response(serializer.data)
     
     def create(self, request):
-        print("=== ПОЛУЧЕН ЗАПРОС НА ДОБАВЛЕНИЕ В КОРЗИНУ ===")
-        
         # Поддерживаем оба формата: и product_id, и product (для HTML-формы)
         product_id = request.data.get('product_id') or request.data.get('product')
         quantity = request.data.get('quantity', 1)
@@ -88,7 +86,7 @@ class CartViewSet(viewsets.GenericViewSet):
                 status=status.HTTP_404_NOT_FOUND
             )
         
-        # Добавляем в корзину
+        # Добавляем в корзину (ЗАМЕНЯЕМ количество, а не прибавляем)
         cart_item, created = CartItem.objects.get_or_create(
             session_id=session_id,
             product=product,
@@ -96,7 +94,7 @@ class CartViewSet(viewsets.GenericViewSet):
         )
         
         if not created:
-            cart_item.quantity += quantity
+            cart_item.quantity = quantity  # ← ЗАМЕНЯЕМ
             cart_item.save()
         
         serializer = CartItemSerializer(cart_item)

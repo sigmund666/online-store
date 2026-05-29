@@ -30,9 +30,10 @@ class Product(models.Model):
         verbose_name = 'Товар'
         verbose_name_plural = 'Товары'
 
-# Позиция в корзине (для неавторизованных пользователей)
+
 class CartItem(models.Model):
-    session_id = models.CharField(max_length=100, verbose_name='ID сессии')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, verbose_name='Пользователь')
+    session_id = models.CharField(max_length=100, null=True, blank=True, verbose_name='ID сессии')
     product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='Товар')
     quantity = models.IntegerField(default=1, verbose_name='Количество')
     

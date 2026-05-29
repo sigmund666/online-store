@@ -1,13 +1,15 @@
+from rest_framework.views import APIView
 from rest_framework import viewsets, status, filters
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend  
 from store.models import Category, Product, CartItem, Order, OrderItem
 from .serializers import (
     CategorySerializer, ProductSerializer, CartItemSerializer,
-    OrderSerializer, OrderCreateSerializer
+    OrderSerializer, OrderCreateSerializer, RegisterSerializer, UserSerializer
 )
 
 # API для категорий
@@ -36,33 +38,35 @@ class ProductViewSet(viewsets.ReadOnlyModelViewSet):
 # API для корзины
 class CartViewSet(viewsets.GenericViewSet):
     serializer_class = CartItemSerializer
-    queryset = CartItem.objects.none()  # пустой queryset, т.к. корзина зависит от сессии
+    queryset = CartItem.objects.none()
     permission_classes = [AllowAny]
     
     def get_session_id(self, request):
+        if request.user.is_authenticated:
+            return None
         session_id = request.session.session_key
         if not session_id:
             request.session.create()
             session_id = request.session.session_key
         return session_id
     
-    def list(self, request):
-        """Получить все товары в корзине"""
+    def get_cart_items(self, request):
+        if request.user.is_authenticated:
+            return CartItem.objects.filter(user=request.user)
         session_id = self.get_session_id(request)
-        cart_items = CartItem.objects.filter(session_id=session_id)
+        return CartItem.objects.filter(session_id=session_id)
+    
+    def list(self, request):
+        cart_items = self.get_cart_items(request)
         serializer = CartItemSerializer(cart_items, many=True)
         return Response(serializer.data)
     
     def create(self, request):
-        # Поддерживаем оба формата: и product_id, и product (для HTML-формы)
         product_id = request.data.get('product_id') or request.data.get('product')
         quantity = request.data.get('quantity', 1)
         
-        # Если product_id пришёл как список (из формы) — берём первый элемент
         if isinstance(product_id, list):
             product_id = product_id[0]
-        
-        # Если quantity пришёл как список (из формы) — берём первый элемент
         if isinstance(quantity, list):
             quantity = quantity[0]
         
@@ -75,9 +79,6 @@ class CartViewSet(viewsets.GenericViewSet):
                 status=status.HTTP_400_BAD_REQUEST
             )
         
-        session_id = self.get_session_id(request)
-        
-        # Ищем товар
         try:
             product = Product.objects.get(id=product_id, is_active=True)
         except Product.DoesNotExist:
@@ -86,78 +87,47 @@ class CartViewSet(viewsets.GenericViewSet):
                 status=status.HTTP_404_NOT_FOUND
             )
         
-        # Добавляем в корзину (ЗАМЕНЯЕМ количество, а не прибавляем)
-        cart_item, created = CartItem.objects.get_or_create(
-            session_id=session_id,
-            product=product,
-            defaults={'quantity': quantity}
-        )
+        session_id = self.get_session_id(request)
         
-        if not created:
-            cart_item.quantity = quantity  # ← ЗАМЕНЯЕМ
-            cart_item.save()
+        if request.user.is_authenticated:
+            cart_item, created = CartItem.objects.get_or_create(
+                user=request.user,
+                product=product,
+                defaults={'quantity': quantity}
+            )
+            if not created:
+                cart_item.quantity = quantity
+                cart_item.save()
+        else:
+            cart_item, created = CartItem.objects.get_or_create(
+                session_id=session_id,
+                product=product,
+                defaults={'quantity': quantity}
+            )
+            if not created:
+                cart_item.quantity = quantity
+                cart_item.save()
         
         serializer = CartItemSerializer(cart_item)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     
     def destroy(self, request, pk=None):
-        """Удалить товар из корзины"""
-        session_id = self.get_session_id(request)
-        cart_item = get_object_or_404(CartItem, id=pk, session_id=session_id)
+        if request.user.is_authenticated:
+            cart_item = get_object_or_404(CartItem, id=pk, user=request.user)
+        else:
+            session_id = self.get_session_id(request)
+            cart_item = get_object_or_404(CartItem, id=pk, session_id=session_id)
         cart_item.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
     
-    @action(detail=False, methods=['put'])
-    def update_quantity(self, request):
-        """Обновить количество товара"""
-        session_id = self.get_session_id(request)
-        cart_item_id = request.data.get('cart_item_id')
-        quantity = request.data.get('quantity')
-        
-        cart_item = get_object_or_404(CartItem, id=cart_item_id, session_id=session_id)
-        cart_item.quantity = quantity
-        cart_item.save()
-        
-        serializer = CartItemSerializer(cart_item)
-        return Response(serializer.data)
-    
     @action(detail=False, methods=['delete'])
     def clear(self, request):
-        """Очистить всю корзину"""
-        session_id = self.get_session_id(request)
-        CartItem.objects.filter(session_id=session_id).delete()
+        if request.user.is_authenticated:
+            CartItem.objects.filter(user=request.user).delete()
+        else:
+            session_id = self.get_session_id(request)
+            CartItem.objects.filter(session_id=session_id).delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-    
-    @action(detail=False, methods=['patch'])
-    def update_item(self, request):
-        """Обновить количество конкретного товара (с проверкой на 0)"""
-        session_id = self.get_session_id(request)
-        cart_item_id = request.data.get('cart_item_id')
-        quantity = request.data.get('quantity')
-        
-        if not cart_item_id or quantity is None:
-            return Response(
-                {'error': 'Не указаны cart_item_id или quantity'}, 
-                status=status.HTTP_400_BAD_REQUEST
-            )
-        
-        try:
-            quantity = int(quantity)
-            if quantity <= 0:
-                cart_item = get_object_or_404(CartItem, id=cart_item_id, session_id=session_id)
-                cart_item.delete()
-                return Response(status=status.HTTP_204_NO_CONTENT)
-            
-            cart_item = get_object_or_404(CartItem, id=cart_item_id, session_id=session_id)
-            cart_item.quantity = quantity
-            cart_item.save()
-            serializer = CartItemSerializer(cart_item)
-            return Response(serializer.data)
-        except ValueError:
-            return Response(
-                {'error': 'Quantity должен быть числом'}, 
-                status=status.HTTP_400_BAD_REQUEST
-            )
 # API для заказов
 class OrderViewSet(viewsets.GenericViewSet):
     serializer_class = OrderSerializer
@@ -216,4 +186,35 @@ class OrderViewSet(viewsets.GenericViewSet):
     def retrieve(self, request, pk=None):
         order = get_object_or_404(Order, id=pk)
         serializer = OrderSerializer(order)
+        return Response(serializer.data)
+    
+# Регистрация пользователя
+class RegisterView(APIView):
+    permission_classes = [AllowAny]
+    
+    def post(self, request):
+        serializer = RegisterSerializer(data=request.data)
+        if serializer.is_valid():
+            user = serializer.save()
+            return Response({
+                'user': UserSerializer(user).data,
+                'message': 'Пользователь успешно создан'
+            }, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+# Профиль пользователя
+class ProfileView(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, request):
+        serializer = UserSerializer(request.user)
+        return Response(serializer.data)
+    
+    def put(self, request):
+        user = request.user
+        user.first_name = request.data.get('first_name', user.first_name)
+        user.last_name = request.data.get('last_name', user.last_name)
+        user.email = request.data.get('email', user.email)
+        user.save()
+        serializer = UserSerializer(user)
         return Response(serializer.data)

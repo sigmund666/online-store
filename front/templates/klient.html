@@ -1,0 +1,64 @@
+﻿<!DOCTYPE html>
+
+{% load static %}
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>{% block title %}Онлайн - Магазин{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+    <link rel="stylesheet" href="C:\Users\derob\Desktop\1\online-store\front\static\Style.css">
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <title></title>
+</head>
+<body>
+    <header class=" pp">
+        <h1><a class=" ppp">Личный кабинет</a></h1>
+    </header>
+
+    <header class=" pppp">
+        <nav>
+
+            <button onclick="window.location.href='/Users/derob/Desktop/1/online-store/front/templates/index.html'" class="filter-open-btn">Главная страница</button>
+            <button onclick="window.location.href='/Users/derob/Desktop/1/online-store/front/templates/cart.html'" class="filter-open-btn">Корзина</button>
+
+        </nav>
+    </header>
+
+    <h2>Мои заказы</h2>
+
+    <table class="orders-table">
+        <thead>
+            <tr>
+                <th class="table-thead">Название</th>
+                <th class="table-thead">Дата</th>
+                <th class="table-thead">Статус</th>
+                <th class="table-thead">Сумма</th>
+                <th class="table-thead"></th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for order in orders %}
+            <tr>
+                <td class="table-td">{{ product.name }}</td>
+                <td class="table-td">{{ order.created_at|date:"d.m.Y H:i" }}</td>
+                <td class="table-td">{{ order.get_status_display }}</td>
+                <td class="table-td">{{ order.total_amount }} руб</td>
+                <td class="table-td">
+                    <button onclick="window.location.href='/Users/derob/Desktop/1/online-store/front/templates/product.html'" class="del">Открыть</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <header class=" pppp">
+        <nav>
+
+            <button onclick="window.location.href='/Users/derob/Desktop/1/online-store/front/templates/auth.html'" class="filter-open-btn">Выйти</button>
+
+        </nav>
+    </header>
+
+</body>
+</html>

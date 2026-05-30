@@ -10,6 +10,16 @@
     color: #9c638d;
 }
 
+.pppp {
+    background: #eabbe8a1;
+    color: #fff;
+    height: 120px;
+    padding-top: 5px !important; /* Уменьшаем отступ сверху */
+    padding-bottom: 5px !important;
+    position: sticky;
+    z-index: 1000;
+}
+
 
 /*  index    баннер  */
 
@@ -146,10 +156,14 @@
     color: #fff;
     border: none;
     border-radius: 8px;
-    cursor: pointer;
-    margin-bottom: 20px;
     margin-right: 50px;
+    margin-top: 0 !important;
+    margin-bottom: 10px !important;
+    position: relative;
+    top: -15px; /* Поднимаем выше */
 }
+
+
 
 /*  index    фильтрация  */
 
@@ -354,3 +368,235 @@
     border-radius: 8px;
     cursor: pointer;
 }
+
+
+
+/*  cart  */
+
+.del {
+    padding: 12px 20px;
+    background: #9c638d;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    margin-right: auto;
+    margin-top: 0 !important;
+    margin-bottom: 10px !important;
+    position: relative;
+    margin-left: 20px;
+    margin-top: 10px;
+}
+
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+}
+
+    /* Заголовки */
+    .table-thead {
+    background: #eabbe8a1;
+    text-align: center;
+    }
+
+    /* Ячейки */
+    .table-td {
+    padding: 14px 18px;
+    font-size: 15px;
+    background: #f8daf6a1;
+    }
+
+
+
+/*  create  */
+
+.vid {
+    padding: 14px 18px;
+    background: #f8daf6a1;
+}
+
+.zakaz {
+    padding: 12px 20px;
+    background: #9c638d;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    margin-right: auto;
+    margin-bottom: 50px;
+    position: relative;
+    margin-left: 20px;
+    margin-top: 10px;
+}
+
+
+
+/* login, register*/
+.log-wrapper {
+    display: flex;
+    width: 900px;
+    margin: 10%;
+    margin-left: -15%;
+    margin-top: 18%;
+    background: #eabbe8a1;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+/*  login */
+.log-left {
+    background: #9c638d;
+    color: white;
+    width: 40%;
+    padding: 40px 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+    .log-left h2 {
+        margin-bottom: 10px;
+    }
+
+    .log-left p {
+        margin-bottom: 20px;
+    }
+
+.btn-light {
+    background: #eabbe8a1;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 10px;
+    border: none;
+    text-decoration: none;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+    .btn-light:hover {
+        background: #2d7ede;
+    }
+
+.log-right {
+    width: 60%;
+    padding: 40px 30px;
+}
+
+    .log-right h2 {
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+.input-group {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+    .input-group input {
+        width: 100%;
+        padding: 12px 40px 12px 12px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 16px;
+    }
+
+    .input-group .icon {
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 18px;
+        color: #888;
+    }
+
+.forgot {
+    display: block;
+    text-align: right;
+    font-size: 14px;
+    color: #9c638d;
+    text-decoration: none;
+    margin-bottom: 20px;
+}
+
+    .forgot:hover {
+        text-decoration: underline;
+    }
+
+.btn-primary {
+    width: 100%;
+    padding: 12px;
+    background: #9c638d;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+    .btn-primary:hover {
+        background: #357ab8;
+    }
+
+.divider {
+    text-align: center;
+    margin: 25px 0 15px;
+    color: #777;
+    font-size: 14px;
+}
+
+.social-icons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+    .social-icons a {
+        background: #eee;
+        padding: 10px 14px;
+        border-radius: 50%;
+        font-size: 16px;
+        color: #333;
+        text-decoration: none;
+        transition: background 0.3s;
+    }
+
+        .social-icons a:hover {
+            background: #ccc;
+        }
+
+/* для register */
+.auth-left {
+    width: 60%;
+    padding: 40px 30px;
+    background: #eabbe8a1;
+}
+
+    .auth-left h2 {
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+.auth-right {
+    width: 40%;
+    background: #9c638d;
+    color: white;
+    padding: 40px 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+    .auth-right h2 {
+        margin-bottom: 10px;
+    }
+
+    .auth-right p {
+        margin-bottom: 20px;
+    }

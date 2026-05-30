@@ -1,0 +1,41 @@
+﻿<!DOCTYPE html>
+
+{% load static %}
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>{% block title %}Онлайн - Магазин{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+    <link rel="stylesheet" href="C:\Users\derob\Desktop\1\online-store\front\static\Style.css">
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <title></title>
+</head>
+    {% extends "admin/base_site.html" %}
+
+    {% block content %}
+<body>
+    <header class=" pp">
+        <h1><a class=" ppp">Админ-панель</a></h1>
+    </header>
+    <h2>Статистика магазина</h2>
+
+    <p>Заказов сегодня: <strong>{{ today_count }}</strong></p>
+    <p>Выручка сегодня: <strong>{{ today_revenue }} руб</strong></p>
+
+    <hr>
+
+    <p>Всего заказов: <strong>{{ total_orders }}</strong></p>
+    <p>Общая выручка: <strong>{{ total_revenue }} руб</strong></p>
+    {% endblock %}
+
+    <header class=" pppp">
+        <nav>
+
+            <button onclick="window.location.href='/Users/derob/Desktop/1/online-store/front/templates/auth.html'" class="filter-open-btn">Выйти</button>
+
+        </nav>
+    </header>
+
+</body>
+</html>

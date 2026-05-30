@@ -11,58 +11,12 @@
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 </head>
 
-<body class="body">
+<body>
     <header class=" pp">
         <h1><a class=" ppp">Каталог товаров</a></h1>
     </header>
-    {% extends "shop/base.html" %}
-    {% load static %}
 
-    {% block title %}Каталог{% endblock %}
-
-    {% block content %}
-
-    <!-- 🔍 Поиск -->
-    <form method="get" class="search-bar">
-        <input type="text" name="q" placeholder="Поиск..." value="{{ search_query }}">
-        <button type="submit" class="poisk">🔍 Найти</button>
-    </form>
-
-
-    <!-- 🛒 Сетка товаров -->
-    <div class="product-grid">
-        {% for product in page_obj %}
-        <div class="product-card">
-            <img src="{{ product.image.url }}" alt="{{ product.name }}">
-            <h3>{{ product.name }}</h3>
-            <p class="price">{{ product.price }} руб</p>
-            <p class="stock">
-                {% if product.in_stock %}В наличии{% else %}Нет в наличии{% endif %}
-            </p>
-            <a href="{% url 'shop:product_detail' product.slug %}" class="btn">Подробнее</a>
-        </div>
-        {% endfor %}
-    </div>
-
-    <!-- 📄 Пагинация -->
-    <div class="pagination">
-        {% if page_obj.has_previous %}
-        <a href="?page={{ page_obj.previous_page_number }}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if search_query %}&q={{ search_query }}{% endif %}">
-            Назад
-        </a>
-        {% endif %}
-
-        <span>Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}</span>
-
-        {% if page_obj.has_next %}
-        <a href="?page={{ page_obj.next_page_number }}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if search_query %}&q={{ search_query }}{% endif %}">
-            Вперёд
-        </a>
-        {% endif %}
-    </div>
-
-    {% endblock %}
-    <header class=" pp">
+    <header class=" pppp">
         <nav>
             <!-- КНОПКА ОТКРЫТИЯ ФИЛЬТРА -->
             <button class="filter-open-btn">▼ Фильтры</button>
@@ -112,9 +66,60 @@
                 };
             </script>
 
-            <button class="filter-open-btn">🛒 Корзина</button>
+            <button onclick="window.location.href='/Users/derob/Desktop/1/online-store/front/templates/cart.html'" class="filter-open-btn">🛒 Корзина</button>
+            <button onclick="window.location.href='/Users/derob/Desktop/1/online-store/front/templates/index.html'" class="filter-open-btn">Главная</button>
+            <button onclick="window.location.href='/Users/derob/Desktop/1/online-store/front/templates/klient.html'" class="filter-open-btn">Профиль</button>
+
         </nav>
     </header>
+    {% extends "shop/base.html" %}
+    {% load static %}
 
+    {% block title %}Каталог{% endblock %}
+
+    {% block content %}
+
+    <!-- 🔍 Поиск -->
+    <form method="get" class="search-bar">
+        <input type="text" name="q" placeholder="Поиск..." value="{{ search_query }}">
+        <button type="submit" class="poisk">🔍 Найти</button>
+    </form>
+
+
+    <!-- 🛒 Сетка товаров -->
+    <div class="product-grid">
+        {% for product in page_obj %}
+        <div class="product-card">
+            <img src="{{ product.image.url }}" alt="{{ product.name }}">
+            <h3>{{ product.name }}</h3>
+            <p class="price">{{ product.price }} руб</p>
+            <p class="stock">
+                {% if product.in_stock %}В наличии{% else %}Нет в наличии{% endif %}
+            </p>
+            <a onclick="window.location.href='/Users/derob/Desktop/1/online-store/front/templates/product.html'" class="btn">Подробнее</a>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- 📄 Пагинация -->
+    <div class="pagination">
+        {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if search_query %}&q={{ search_query }}{% endif %}">
+            Назад
+        </a>
+        {% endif %}
+
+        <span>Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}</span>
+
+        {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if search_query %}&q={{ search_query }}{% endif %}">
+            Вперёд
+        </a>
+        {% endif %}
+    </div>
+
+    {% endblock %}
+
+    <header class=" pppp"> </header>
 </body>
 </html>

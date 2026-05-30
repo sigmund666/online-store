@@ -1,0 +1,57 @@
+﻿<!DOCTYPE html>
+
+{% load static %}
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>{% block title %}Онлайн - Магазин{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+    <link rel="stylesheet" href="C:\Users\derob\Desktop\1\online-store\front\static\Style.css">
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <title></title>
+</head>
+<body>
+
+    {% block content %}
+    <header class=" pp">
+        <h1><a class=" ppp">Корзина</a></h1>
+    </header>
+
+    <header class=" pppp">
+        <nav>
+
+            <button onclick="window.location.href='/Users/derob/Desktop/1/online-store/front/templates/index.html'" class="filter-open-btn">Главная страница</button>
+            <button onclick="window.location.href='/Users/derob/Desktop/1/online-store/front/templates/klient.html'" class="filter-open-btn">Профиль</button>
+
+        </nav>
+    </header>
+
+    {% if cart_items %}
+    <table class="table">
+        <tr>
+            <th class="table-thead">Товар</th>
+            <th class="table-thead">Кол-во</th>
+            <th class="table-thead">Сумма</th>
+            <th class="table-thead"></th>
+        </tr>
+        {% for item in cart_items %}
+        <tr>
+            <td class="table-td">{{ item.product.name }}</td>
+            <td class="table-td">{{ item.quantity }}</td>
+            <td class="table-td">{{ item.cost }} руб </td>
+            <td class="table-td">
+                <button class="del">Удалить</button>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <p><strong>Итого: {{ total }} руб </strong></p>
+    <button onclick="window.location.href='/Users/derob/Desktop/1/online-store/front/templates/create.html'" class="filter-open-btn">Оформить заказ</button>
+    {% else %}
+    <p>Корзина пуста.</p>
+    {% endif %}
+    {% endblock %}
+
+</body>
+</html>

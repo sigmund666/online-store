@@ -1,0 +1,49 @@
+﻿<!DOCTYPE html>
+
+{% load static %}
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>{% block title %}Онлайн - Магазин{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+    <link rel="stylesheet" href="C:\Users\derob\Desktop\1\online-store\front\static\Style.css">
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <title></title>
+</head>
+<body>
+    {% extends "shop/base.html" %}
+
+    {% block title %}{{ product.name }}{% endblock %}
+
+    {% block content %}
+    <header class=" pp">
+        <h1><a class=" ppp">{{ product.name }}</a></h1>
+    </header>
+
+    <p>{{ product.description }}</p>
+    <p><strong>{{ product.price }} руб</strong></p>
+
+    <form action="{% url 'shop:cart_add' product.id %}" method="post">
+        {% csrf_token %}
+        <label>
+            <br />
+            Количество:
+            <input type="number" name="quantity" value="1" min="1">
+        </label>
+        <br />
+        <button class="del">Добавить в корзину</button>
+    </form>
+    {% endblock %}
+
+
+    <header class=" pppp">
+        <nav>
+
+            <button onclick="window.location.href='/Users/derob/Desktop/1/online-store/front/templates/list.html'" class="filter-open-btn">Назад</button>
+
+        </nav>
+    </header>
+
+</body>
+</html>

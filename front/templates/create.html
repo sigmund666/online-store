@@ -1,0 +1,58 @@
+﻿<!DOCTYPE html>
+
+{% load static %}
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>{% block title %}Онлайн - Магазин{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+    <link rel="stylesheet" href="C:\Users\derob\Desktop\1\online-store\front\static\Style.css">
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <title></title>
+</head>
+<body>
+    {% extends "shop/base.html" %}
+
+    {% block content %}
+    <header class=" pp">
+        <h1><a class=" ppp">Оформление заказа</a></h1>
+    </header>
+
+    <h3 class="vid">Ваш заказ</h3>
+    <ul class="vid">
+        {% for item in cart_items %}
+        <li>{{ item.product.name }} — {{ item.quantity }} шт. — {{ item.cost }} руб</li>
+        {% endfor %}
+    </ul>
+    <p><strong>Итого: {{ total }} руб</strong></p>
+
+    <form method="post">
+        {% csrf_token %}
+        <label>
+            Имя:
+            <input type="text" name="name" required>
+        </label>
+        <label>
+            Email:
+            <input type="email" name="email" required>
+        </label>
+        <label>
+            Адрес:
+            <textarea name="address" required></textarea>
+        </label>
+        <button class="zakaz">Подтвердить заказ</button>
+    </form>
+    {% endblock %}
+
+
+    <header class=" pppp">
+        <nav>
+
+            <button onclick="window.location.href='/Users/derob/Desktop/1/online-store/front/templates/cart.html'" class="filter-open-btn">Назад</button>
+
+        </nav>
+    </header>
+
+</body>
+</html>

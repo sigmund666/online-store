@@ -7,7 +7,7 @@
     <title>{% block title %}Онлайн - Магазин{% endblock %}</title>
     <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
-    <link rel="stylesheet" href="C:\Users\derob\Desktop\1\online-store\front\static\Style.css">
+    <link rel="stylesheet" href="{{ request.url_for('static', path='/css/style.css') }}">
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <title></title>
 </head>
@@ -35,7 +35,7 @@
             <h2 style="text-align: center ">Добро пожаловать!</h2>
             <br>
             <p>У Вас уже есть учетная запись?</p>
-            <a onclick="window.location.href='/Users/derob/Desktop/1/online-store/front/templates/auth.html'" class="btn-light">Вход</a>
+            <a onclick="window.location.href='/auth'" class="btn-light">Вход</a>
         </div>
     </div>
 </body>

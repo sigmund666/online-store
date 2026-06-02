@@ -7,42 +7,46 @@
     <title>{% block title %}Онлайн - Магазин{% endblock %}</title>
     <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
-    <link rel="stylesheet" href="C:\Users\derob\Desktop\1\online-store\front\static\Style.css">
+    <link rel="stylesheet" href="{{ request.url_for('static', path='/css/style.css') }}">
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 </head>
 
 <body>
+    <div class="user-info" style=" text-align: center; ">
+        {{ request.user.username }}
+    </div>
+
     <header class=" pp">
         <h1><a class=" ppp">Онлайн - Магазин</a></h1>
     </header>
 
     <header class=" pppp">
         <nav class="nav">
-            <button onclick="window.location.href='/Users/derob/Desktop/1/online-store/front/templates/list.html'" class="filter-open-btn">Каталог</button>
+            <button onclick="window.location.href='/list'" class="filter-open-btn">Каталог</button>
 
-            <button onclick="window.location.href='/Users/derob/Desktop/1/online-store/front/templates/cart.html'" class="filter-open-btn">Корзина</button>
+            <button onclick="window.location.href='/cart'" class="filter-open-btn">Корзина</button>
 
-            <button onclick="window.location.href='/Users/derob/Desktop/1/online-store/front/templates/klient.html'" class="filter-open-btn">Профиль</button>
+            <button onclick="window.location.href='/klient'" class="filter-open-btn">Профиль</button>
 
-            <button onclick="window.location.href='/Users/derob/Desktop/1/online-store/front/templates/auth.html'" class="filter-open-btn">Войти</button>
+            <button onclick="window.location.href='/auth'" class="filter-open-btn">Войти</button>
         </nav>
     </header>
 
     <main>
         {% block content %}
 
-        <!-- БАННЕР -->
-        <h2>🔥 Спецпредложения</h2>
+
+        <h2> Спецпредложения</h2>
         <section class="banner">
 
             <div class="banner-image">
-                {% for product in banner_products %}
+                {% for products in banner_products %}
                 <div class="banner-info">
-                    <img src="{{ product.image.url }}" alt="{{ product.name }}">
-                    <h1 class="banner-title">{{ product.name }}</h1>
-                    <p class="banner-price">{{ product.price }} руб</p>
+                    <img src="{{ products.image.url }}" alt="{{ products.name }}">
+                    <h1 class="banner-title">{{ products.name }}</h1>
+                    <p class="banner-price">{{ products.price }} BYN</p>
                     <div class="hero-text">
-                        <a  onclick="window.location.href='/Users/derob/Desktop/1/online-store/front/templates/product.html'" class="btn">Подробнее</a>
+                        <a onclick="window.location.href='/product'" class="btn">Подробнее</a>
                     </div>
 
                     <form action="{% url 'shop:cart_add' product.id %}" method="post">
@@ -70,19 +74,19 @@
         <hr>
 
 
-        <!-- ПОПУЛЯРНЫЕ ТОВАРЫ -->
+
         <section class="popular">
-            <h2>⭐ Популярные товары</h2>
+            <h2> Популярные товары</h2>
 
             <div class="swiper product-swiper">
                 <div class="swiper-wrapper">
                     <div class="swiper-slide">
                         <div class="product-card">
-                            <img src="{{ product.image.url }}" alt="{{ product.name }}">
-                            <h3>{{ product.name }}</h3>
-                            <p class="price">{{ product.price }} руб</p>
+                            <img src="{{ products.image.url }}" alt="{{ products.name }}">
+                            <h3>{{ products.name }}</h3>
+                            <p class="price">{{ products.price }} BYN</p>
                             <br />
-                            <a onclick="window.location.href='/Users/derob/Desktop/1/online-store/front/templates/product.html'"  class="tt">Подробнее</a>
+                            <a onclick="window.location.href='/product'" class="tt">Подробнее</a>
                         </div>
                     </div>
                     {% endfor %}
@@ -98,16 +102,16 @@
         <hr>
 
 
-        <!-- КАТЕГОРИИ -->
+
         <section class="categories">
-            <h2>📂 Категории</h2>
+            <h2> Категории</h2>
             <div class="categories-grid">
                 {% for category in categories %}
-                <a href="{% url 'shop:category_products' category.slug %}" class="category-card">
+                <a href="{% url 'shop:categories_products' category.slug %}" class="category-card">
                     <div class="category-image">
-                        <img src="{{ category.image.url }}" alt="{{ category.name }}">
+                        <img src="{{ categories.image.url }}" alt="{{ categories.name }}">
                     </div>
-                    <span class="category-name">{{ category.name }}</span>
+                    <span class="category-name">{{ categories.name }}</span>
                 </a>
                 {% endfor %}
             </div>

@@ -7,21 +7,26 @@
     <title>{% block title %}Онлайн - Магазин{% endblock %}</title>
     <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
-    <link rel="stylesheet" href="C:\Users\derob\Desktop\1\online-store\front\static\Style.css">
+    <link rel="stylesheet" href="{{ request.url_for('static', path='/css/style.css') }}">
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 </head>
 
 <body>
+
+    <div class="user-info" style=" text-align: center; ">
+        {{ request.user.username }}
+    </div>
+
     <header class=" pp">
         <h1><a class=" ppp">Каталог товаров</a></h1>
     </header>
 
     <header class=" pppp">
         <nav>
-            <!-- КНОПКА ОТКРЫТИЯ ФИЛЬТРА -->
-            <button class="filter-open-btn">▼ Фильтры</button>
 
-            <!-- ФИЛЬТРАЦИЯ -->
+            <button class="filter-open-btn"> Фильтры</button>
+
+
             <div class="filter-modal" id="filterModal">
                 <div class="filter-content">
 
@@ -36,8 +41,8 @@
                             <option value="">Все</option>
                             {% for cat in categories %}
                             <option value="{{ cat.slug }}"
-                                    {% if selected_category= =cat.slug %}selected{% endif %}>
-                                {{ cat.name }}
+                                    {% if selected_categories= =cat.slug %}selected{% endif %}>
+                                {{ categories.name }}
                             </option>
                             {% endfor %}
                         </select>
@@ -66,9 +71,9 @@
                 };
             </script>
 
-            <button onclick="window.location.href='/Users/derob/Desktop/1/online-store/front/templates/cart.html'" class="filter-open-btn">🛒 Корзина</button>
-            <button onclick="window.location.href='/Users/derob/Desktop/1/online-store/front/templates/index.html'" class="filter-open-btn">Главная</button>
-            <button onclick="window.location.href='/Users/derob/Desktop/1/online-store/front/templates/klient.html'" class="filter-open-btn">Профиль</button>
+            <button onclick="window.location.href='/cart'" class="filter-open-btn"> Корзина</button>
+            <button onclick="window.location.href='/index'" class="filter-open-btn">Главная</button>
+            <button onclick="window.location.href='/klient'" class="filter-open-btn">Профиль</button>
 
         </nav>
     </header>
@@ -79,29 +84,29 @@
 
     {% block content %}
 
-    <!-- 🔍 Поиск -->
+
     <form method="get" class="search-bar">
         <input type="text" name="q" placeholder="Поиск..." value="{{ search_query }}">
-        <button type="submit" class="poisk">🔍 Найти</button>
+        <button type="submit" class="poisk"> Найти</button>
     </form>
 
 
-    <!-- 🛒 Сетка товаров -->
+
     <div class="product-grid">
         {% for product in page_obj %}
         <div class="product-card">
-            <img src="{{ product.image.url }}" alt="{{ product.name }}">
-            <h3>{{ product.name }}</h3>
-            <p class="price">{{ product.price }} руб</p>
+            <img src="{{ products.image.url }}" alt="{{ products.name }}">
+            <h3>{{ products.name }}</h3>
+            <p class="price">{{ products.price }} BYN</p>
             <p class="stock">
                 {% if product.in_stock %}В наличии{% else %}Нет в наличии{% endif %}
             </p>
-            <a onclick="window.location.href='/Users/derob/Desktop/1/online-store/front/templates/product.html'" class="btn">Подробнее</a>
+            <a onclick="window.location.href='/product'" class="btn">Подробнее</a>
         </div>
         {% endfor %}
     </div>
 
-    <!-- 📄 Пагинация -->
+
     <div class="pagination">
         {% if page_obj.has_previous %}
         <a href="?page={{ page_obj.previous_page_number }}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if search_query %}&q={{ search_query }}{% endif %}">

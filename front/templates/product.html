@@ -7,24 +7,29 @@
     <title>{% block title %}Онлайн - Магазин{% endblock %}</title>
     <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
-    <link rel="stylesheet" href="C:\Users\derob\Desktop\1\online-store\front\static\Style.css">
+    <link rel="stylesheet" href="{{ request.url_for('static', path='/css/style.css') }}">
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <title></title>
 </head>
 <body>
+
+    <div class="user-info" style=" text-align: center; ">
+        {{ request.user.username }}
+    </div>
+
     {% extends "shop/base.html" %}
 
-    {% block title %}{{ product.name }}{% endblock %}
+    {% block title %}{{ products.name }}{% endblock %}
 
     {% block content %}
     <header class=" pp">
-        <h1><a class=" ppp">{{ product.name }}</a></h1>
+        <h1><a class=" ppp">{{ products.name }}</a></h1>
     </header>
 
-    <p>{{ product.description }}</p>
-    <p><strong>{{ product.price }} руб</strong></p>
+    <p>{{ products.description }}</p>
+    <p><strong>{{ products.price }} BYN</strong></p>
 
-    <form action="{% url 'shop:cart_add' product.id %}" method="post">
+    <form action="{% url 'shop:cart_add' products.id %}" method="post">
         {% csrf_token %}
         <label>
             <br />
@@ -35,12 +40,12 @@
         <button class="del">Добавить в корзину</button>
     </form>
     {% endblock %}
-
+    <hr>
 
     <header class=" pppp">
         <nav>
 
-            <button onclick="window.location.href='/Users/derob/Desktop/1/online-store/front/templates/list.html'" class="filter-open-btn">Назад</button>
+            <button onclick="window.location.href='/list'" class="filter-open-btn">Назад</button>
 
         </nav>
     </header>

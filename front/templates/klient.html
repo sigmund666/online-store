@@ -7,11 +7,16 @@
     <title>{% block title %}Онлайн - Магазин{% endblock %}</title>
     <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
-    <link rel="stylesheet" href="C:\Users\derob\Desktop\1\online-store\front\static\Style.css">
+    <link rel="stylesheet" href="{{ request.url_for('static', path='/css/style.css') }}">
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <title></title>
 </head>
 <body>
+
+    <div class="user-info" style=" text-align: center; ">
+        {{ request.user.username }}
+    </div>
+
     <header class=" pp">
         <h1><a class=" ppp">Личный кабинет</a></h1>
     </header>
@@ -19,8 +24,8 @@
     <header class=" pppp">
         <nav>
 
-            <button onclick="window.location.href='/Users/derob/Desktop/1/online-store/front/templates/index.html'" class="filter-open-btn">Главная страница</button>
-            <button onclick="window.location.href='/Users/derob/Desktop/1/online-store/front/templates/cart.html'" class="filter-open-btn">Корзина</button>
+            <button onclick="window.location.href='/index'" class="filter-open-btn">Главная страница</button>
+            <button onclick="window.location.href='/cart'" class="filter-open-btn">Корзина</button>
 
         </nav>
     </header>
@@ -41,21 +46,23 @@
         <tbody>
             {% for order in orders %}
             <tr>
-                <td class="table-td">{{ product.name }}</td>
+                <td class="table-td">{{ products.name }}</td>
                 <td class="table-td">{{ order.created_at|date:"d.m.Y H:i" }}</td>
-                <td class="table-td">{{ order.get_status_display }}</td>
-                <td class="table-td">{{ order.total_amount }} руб</td>
+                <td class="table-td">{{ products.is_active }}</td>
+                <td class="table-td">{{ order_items.unit_price }} BYN</td>
                 <td class="table-td">
-                    <button onclick="window.location.href='/Users/derob/Desktop/1/online-store/front/templates/product.html'" class="del">Открыть</button>
+                    <button onclick="window.location.href='/product'" class="del">Открыть</button>
                 </td>
             </tr>
         </tbody>
     </table>
 
+    <hr>
+
     <header class=" pppp">
         <nav>
 
-            <button onclick="window.location.href='/Users/derob/Desktop/1/online-store/front/templates/auth.html'" class="filter-open-btn">Выйти</button>
+            <button onclick="window.location.href='/auth'" class="filter-open-btn">Выйти</button>
 
         </nav>
     </header>

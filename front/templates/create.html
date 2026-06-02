@@ -7,11 +7,16 @@
     <title>{% block title %}Онлайн - Магазин{% endblock %}</title>
     <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
-    <link rel="stylesheet" href="C:\Users\derob\Desktop\1\online-store\front\static\Style.css">
+    <link rel="stylesheet" href="{{ request.url_for('static', path='/css/style.css') }}">
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <title></title>
 </head>
 <body>
+
+    <div class="user-info" style=" text-align: center; ">
+        {{ request.user.username }}
+    </div>
+
     {% extends "shop/base.html" %}
 
     {% block content %}
@@ -22,7 +27,7 @@
     <h3 class="vid">Ваш заказ</h3>
     <ul class="vid">
         {% for item in cart_items %}
-        <li>{{ item.product.name }} — {{ item.quantity }} шт. — {{ item.cost }} руб</li>
+        <li>{{ products.name }} — {{ cart_items.quantity }} шт. — {{ order_items.unit_price }} BYN</li>
         {% endfor %}
     </ul>
     <p><strong>Итого: {{ total }} руб</strong></p>
@@ -49,7 +54,7 @@
     <header class=" pppp">
         <nav>
 
-            <button onclick="window.location.href='/Users/derob/Desktop/1/online-store/front/templates/cart.html'" class="filter-open-btn">Назад</button>
+            <button onclick="window.location.href='/cart'" class="filter-open-btn">Назад</button>
 
         </nav>
     </header>

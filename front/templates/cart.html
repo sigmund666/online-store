@@ -1,61 +1,27 @@
-﻿<!DOCTYPE html>
-
-{% load static %}
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <meta charset="utf-8" />
-    <title>{% block title %}Онлайн - Магазин{% endblock %}</title>
-    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
-    <link rel="stylesheet" href="{{ request.url_for('static', path='/css/style.css') }}">
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-    <title></title>
-</head>
-<body>
-
-    <div class="user-info" style=" text-align: center; ">
-        {{ request.user.username }}
-    </div>
-
-    {% block content %}
-    <header class=" pp">
-        <h1><a class=" ppp">Корзина</a></h1>
-    </header>
-
-    <header class=" pppp">
-        <nav>
-
-            <button onclick="window.location.href='/index'" class="filter-open-btn">Главная страница</button>
-            <button onclick="window.location.href='/klient'" class="filter-open-btn">Профиль</button>
-
-        </nav>
-    </header>
-
+{% extends "base.html" %}
+{% block title %}Корзина{% endblock %}
+{% block content %}
+    <h2>Корзина</h2>
     {% if cart_items %}
-    <table class="table">
-        <tr>
-            <th class="table-thead">Товар</th>
-            <th class="table-thead">Кол-во</th>
-            <th class="table-thead">Цена</th>
-            <th class="table-thead"></th>
-        </tr>
-        {% for item in cart_items %}
-        <tr>
-            <td class="table-td">{{ products.name }}</td>
-            <td class="table-td">{{ order_items.quantity }}</td>
-            <td class="table-td">{{ order_items.unit_price }} BYN </td>
-            <td class="table-td">
-                <button class="del">Удалить</button>
-            </td>
-        </tr>
-        {% endfor %}
-    </table>
-    <p><strong>Итого: {{ orders.total }} BYN </strong></p>
-    <button onclick="window.location.href='/create'" class="filter-open-btn">Оформить заказ</button>
+        <table class="table">
+            <tr><th>Товар</th><th>Кол-во</th><th>Цена</th><th>Удалить</th></tr>
+            {% for item in cart_items %}
+                <tr>
+                    <td>{{ item.product.name }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>{{ item.product.price|floatformat:2 }} BYN</td>
+                    <td>
+                        <form action="{% url 'shop:cart_remove' item.id %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="del">Удалить</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+        <p><strong>Итого: {{ cart_total|floatformat:2 }} BYN</strong></p>
+        <a href="{% url 'shop:create_order' %}" class="filter-open-btn">Оформить заказ</a>
     {% else %}
-    <p>Корзина пуста.</p>
+        <p>Корзина пуста.</p>
     {% endif %}
-    {% endblock %}
-
-</body>
-</html>
+{% endblock %}

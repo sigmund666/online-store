@@ -1,126 +1,52 @@
-﻿<!DOCTYPE html>
-
-{% load static %}
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <meta charset="UTF-8">
-    <title>{% block title %}Онлайн - Магазин{% endblock %}</title>
-    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
-    <link rel="stylesheet" href="{{ request.url_for('static', path='/css/style.css') }}">
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-</head>
-
-<body>
-    <div class="user-info" style=" text-align: center; ">
-        {{ request.user.username }}
-    </div>
-
-    <header class=" pp">
-        <h1><a class=" ppp">Онлайн - Магазин</a></h1>
-    </header>
-
-    <header class=" pppp">
-        <nav class="nav">
-            <button onclick="window.location.href='/list'" class="filter-open-btn">Каталог</button>
-
-            <button onclick="window.location.href='/cart'" class="filter-open-btn">Корзина</button>
-
-            <button onclick="window.location.href='/klient'" class="filter-open-btn">Профиль</button>
-
-            <button onclick="window.location.href='/auth'" class="filter-open-btn">Войти</button>
-        </nav>
-    </header>
-
-    <main>
-        {% block content %}
-
-
-        <h2> Спецпредложения</h2>
-        <section class="banner">
-
-            <div class="banner-image">
-                {% for products in banner_products %}
+{% extends "base.html" %}
+{% block title %}Главная{% endblock %}
+{% block content %}
+<section class="banner">
+    <h2>Спецпредложения</h2>
+    {% if banner_products %}
+        <div class="banner-image">
+            {% for product in banner_products %}
                 <div class="banner-info">
-                    <img src="{{ products.image.url }}" alt="{{ products.name }}">
-                    <h1 class="banner-title">{{ products.name }}</h1>
-                    <p class="banner-price">{{ products.price }} BYN</p>
+                    {% if product.image %}
+                        <img src="{{ product.image.url }}" alt="{{ product.name }}" style="max-width:100%; height:auto;">
+                    {% endif %}
+                    <h1 class="banner-title">{{ product.name }}</h1>
+                    <p class="banner-price">{{ product.price }} BYN</p>
                     <div class="hero-text">
-                        <a onclick="window.location.href='/product'" class="btn">Подробнее</a>
+                        <a href="{% url 'shop:product_detail' product.id %}" class="btn">Подробнее</a>
                     </div>
-
-                    <form action="{% url 'shop:cart_add' product.id %}" method="post">
-                        {% csrf_token %}
-                        <input type="hidden" name="size" value="{{ selected_size }}">
-                        <button class="add-to-cart">Добавить в корзину</button>
-                    </form>
                 </div>
-                {% endfor %}
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>Нет специальных предложений.</p>
+    {% endif %}
+</section>
+
+<section class="popular">
+    <h2>Популярные товары</h2>
+    <div class="product-grid">
+        {% for product in products %}
+            <div class="product-card">
+                {% if product.image %}
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                {% endif %}
+                <h3>{{ product.name }}</h3>
+                <p class="price">{{ product.price }} BYN</p>
+                <a href="{% url 'shop:product_detail' product.id %}" class="tt">Подробнее</a>
             </div>
-        </section>
+        {% endfor %}
+    </div>
+</section>
 
-        <script>
-            new Swiper('.hero-swiper', {
-                loop: true,
-                autoplay: { delay: 3500 },
-                pagination: { el: '.swiper-pagination', clickable: true },
-                navigation: {
-                    nextEl: '.swiper-button-next',
-                    prevEl: '.swiper-button-prev'
-                }
-            });
-        </script>
-
-        <hr>
-
-
-
-        <section class="popular">
-            <h2> Популярные товары</h2>
-
-            <div class="swiper product-swiper">
-                <div class="swiper-wrapper">
-                    <div class="swiper-slide">
-                        <div class="product-card">
-                            <img src="{{ products.image.url }}" alt="{{ products.name }}">
-                            <h3>{{ products.name }}</h3>
-                            <p class="price">{{ products.price }} BYN</p>
-                            <br />
-                            <a onclick="window.location.href='/product'" class="tt">Подробнее</a>
-                        </div>
-                    </div>
-                    {% endfor %}
-
-                </div>
-
-                <div class="swiper-pagination"></div>
-                <div class="swiper-button-prev"></div>
-                <div class="swiper-button-next"></div>
-            </div>
-        </section>
-
-        <hr>
-
-
-
-        <section class="categories">
-            <h2> Категории</h2>
-            <div class="categories-grid">
-                {% for category in categories %}
-                <a href="{% url 'shop:categories_products' category.slug %}" class="category-card">
-                    <div class="category-image">
-                        <img src="{{ categories.image.url }}" alt="{{ categories.name }}">
-                    </div>
-                    <span class="category-name">{{ categories.name }}</span>
-                </a>
-                {% endfor %}
-            </div>
-        </section>
-
-        {% endblock %}
-    </main>
-
-    <header class=" pppp"> </header>
-
-</body>
-</html>
+<section class="categories">
+    <h2>Категории</h2>
+    <div class="categories-grid">
+        {% for category in categories %}
+            <a href="{% url 'shop:product_list' %}?category={{ category.id }}" class="category-card">
+                <span class="category-name">{{ category.name }}</span>
+            </a>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

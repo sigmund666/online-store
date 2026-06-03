@@ -1,63 +1,21 @@
-﻿<!DOCTYPE html>
-
-{% load static %}
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <meta charset="utf-8" />
-    <title>{% block title %}Онлайн - Магазин{% endblock %}</title>
-    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
-    <link rel="stylesheet" href="{{ request.url_for('static', path='/css/style.css') }}">
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-    <title></title>
-</head>
-<body>
-
-    <div class="user-info" style=" text-align: center; ">
-        {{ request.user.username }}
-    </div>
-
-    {% extends "shop/base.html" %}
-
-    {% block content %}
-    <header class=" pp">
-        <h1><a class=" ppp">Оформление заказа</a></h1>
-    </header>
-
-    <h3 class="vid">Ваш заказ</h3>
-    <ul class="vid">
+{% extends "base.html" %}
+{% block title %}Оформление заказа{% endblock %}
+{% block content %}
+    <h2>Оформление заказа</h2>
+    {% if error %}
+        <p class="alert">{{ error }}</p>
+    {% endif %}
+    <ul>
         {% for item in cart_items %}
-        <li>{{ products.name }} — {{ cart_items.quantity }} шт. — {{ order_items.unit_price }} BYN</li>
+            <li>{{ item.product.name }} — {{ item.quantity }} шт. — {{ item.product.price|floatformat:2 }} BYN</li>
         {% endfor %}
     </ul>
-    <p><strong>Итого: {{ total }} руб</strong></p>
-
+    <p><strong>Итого: {{ total|floatformat:2 }} BYN</strong></p>
     <form method="post">
         {% csrf_token %}
-        <label>
-            Имя:
-            <input type="text" name="name" required>
-        </label>
-        <label>
-            Email:
-            <input type="email" name="email" required>
-        </label>
-        <label>
-            Адрес:
-            <textarea name="address" required></textarea>
-        </label>
-        <button class="zakaz">Подтвердить заказ</button>
+        <div class="input-group"><input type="text" name="name" placeholder="ФИО" required></div>
+        <div class="input-group"><input type="text" name="phone" placeholder="Телефон" required></div>
+        <div class="input-group"><textarea name="address" placeholder="Адрес" required></textarea></div>
+        <button type="submit" class="btn">Подтвердить заказ</button>
     </form>
-    {% endblock %}
-
-
-    <header class=" pppp">
-        <nav>
-
-            <button onclick="window.location.href='/cart'" class="filter-open-btn">Назад</button>
-
-        </nav>
-    </header>
-
-</body>
-</html>
+{% endblock %}

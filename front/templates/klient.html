@@ -1,71 +1,20 @@
-﻿<!DOCTYPE html>
-
-{% load static %}
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <meta charset="utf-8" />
-    <title>{% block title %}Онлайн - Магазин{% endblock %}</title>
-    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
-    <link rel="stylesheet" href="{{ request.url_for('static', path='/css/style.css') }}">
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-    <title></title>
-</head>
-<body>
-
-    <div class="user-info" style=" text-align: center; ">
-        {{ request.user.username }}
-    </div>
-
-    <header class=" pp">
-        <h1><a class=" ppp">Личный кабинет</a></h1>
-    </header>
-
-    <header class=" pppp">
-        <nav>
-
-            <button onclick="window.location.href='/index'" class="filter-open-btn">Главная страница</button>
-            <button onclick="window.location.href='/cart'" class="filter-open-btn">Корзина</button>
-
-        </nav>
-    </header>
-
-    <h2>Мои заказы</h2>
-
-    <table class="orders-table">
-        <thead>
-            <tr>
-                <th class="table-thead">Название</th>
-                <th class="table-thead">Дата</th>
-                <th class="table-thead">Статус</th>
-                <th class="table-thead">Сумма</th>
-                <th class="table-thead"></th>
-            </tr>
-        </thead>
-
-        <tbody>
+{% extends "base.html" %}
+{% block title %}Личный кабинет{% endblock %}
+{% block content %}
+    <h2>Личный кабинет</h2>
+    {% if orders %}
+        <table class="table">
+            <tr><th>ФИО</th><th>Дата</th><th>Статус</th><th>Сумма</th></tr>
             {% for order in orders %}
-            <tr>
-                <td class="table-td">{{ products.name }}</td>
-                <td class="table-td">{{ order.created_at|date:"d.m.Y H:i" }}</td>
-                <td class="table-td">{{ products.is_active }}</td>
-                <td class="table-td">{{ order_items.unit_price }} BYN</td>
-                <td class="table-td">
-                    <button onclick="window.location.href='/product'" class="del">Открыть</button>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-
-    <hr>
-
-    <header class=" pppp">
-        <nav>
-
-            <button onclick="window.location.href='/auth'" class="filter-open-btn">Выйти</button>
-
-        </nav>
-    </header>
-
-</body>
-</html>
+                <tr>
+                    <td>{{ order.full_name }}</td>
+                    <td>{{ order.created_at|date:"d.m.Y H:i" }}</td>
+                    <td>{{ order.status }}</td>
+                    <td>{{ order.total_amount|floatformat:2 }} BYN</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>Заказов нет.</p>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,44 @@
+﻿<!DOCTYPE html>
+
+{% load static %}
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>{% block title %}Онлайн - Магазин{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+    <link rel="stylesheet" href="{{ request.url_for('static', path='/css/style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <title></title>
+</head>
+
+<body >
+    <div class="log-wrapper">
+        <div class="col-md-6 log-left">
+            <h2 style="text-align: center;">С возвращением!</h2>
+            <p>У Вас нет учетной записи?</p>
+            <a onclick="window.location.href='/register'" class="btn btn-light">Регистрация</a>
+            <br />
+            <button onclick="window.location.href='/index'" class="btn btn-light">Назад</button>
+        </div>
+
+        <div class="col-md-6 log-right">
+            <h2  style="text-align: center; color: #9c638d; ">Вход</h2>
+            <form method="post" action="/login">
+                <div class="input-group mb-2">
+                    <input id="email" name="email" type="email" placeholder="Email" required class="form-control">
+                </div>
+                <div class="input-group mb-2">
+                    <input id="password" name="password" type="password" placeholder="Пароль" required class="form-control">
+                </div>
+                <button type="submit" class="btn btn-primary">Вход</button>
+            </form>
+
+            {% if error %}
+            <div class="alert alert-danger mt-3">{{ error }}</div>
+            {% endif %}
+        </div>
+    </div>
+    {% endblock %}
+</body>
+</html>

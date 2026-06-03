@@ -7,29 +7,46 @@
     <title>{% block title %}Онлайн - Магазин{% endblock %}</title>
     <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
-    <link rel="stylesheet" href="C:\Users\derob\Desktop\1\online-store\front\static\Style.css">
+    <link rel="stylesheet" href="{{ request.url_for('static', path='/css/style.css') }}">
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 </head>
-<body  class="body">
+
+<body>
+    <div class="user-info" style=" text-align: center; ">
+        {{ request.user.username }}
+    </div>
+
     <header class=" pp">
         <h1><a class=" ppp">Онлайн - Магазин</a></h1>
+    </header>
+
+    <header class=" pppp">
+        <nav class="nav">
+            <button onclick="window.location.href='/list'" class="filter-open-btn">Каталог</button>
+
+            <button onclick="window.location.href='/cart'" class="filter-open-btn">Корзина</button>
+
+            <button onclick="window.location.href='/klient'" class="filter-open-btn">Профиль</button>
+
+            <button onclick="window.location.href='/auth'" class="filter-open-btn">Войти</button>
+        </nav>
     </header>
 
     <main>
         {% block content %}
 
-        <!-- БАННЕР -->
-        <h2>🔥 Спецпредложения</h2>
+
+        <h2> Спецпредложения</h2>
         <section class="banner">
 
             <div class="banner-image">
-                {% for product in banner_products %}
+                {% for products in banner_products %}
                 <div class="banner-info">
-                    <img src="{{ product.image.url }}" alt="{{ product.name }}">
-                    <h1 class="banner-title">{{ product.name }}</h1>
-                    <p class="banner-price">{{ product.price }} руб</p>
+                    <img src="{{ products.image.url }}" alt="{{ products.name }}">
+                    <h1 class="banner-title">{{ products.name }}</h1>
+                    <p class="banner-price">{{ products.price }} BYN</p>
                     <div class="hero-text">
-                        <a href="{% url 'shop:product_detail' product.slug %}" class="btn">Подробнее</a>
+                        <a onclick="window.location.href='/product'" class="btn">Подробнее</a>
                     </div>
 
                     <form action="{% url 'shop:cart_add' product.id %}" method="post">
@@ -57,18 +74,19 @@
         <hr>
 
 
-        <!-- ПОПУЛЯРНЫЕ ТОВАРЫ -->
+
         <section class="popular">
-            <h2>⭐ Популярные товары</h2>
+            <h2> Популярные товары</h2>
 
             <div class="swiper product-swiper">
                 <div class="swiper-wrapper">
                     <div class="swiper-slide">
                         <div class="product-card">
-                            <img src="{{ product.image.url }}" alt="{{ product.name }}">
-                            <h3>{{ product.name }}</h3>
-                            <p class="price">{{ product.price }} руб</p>
-                            <a href="{% url 'shop:product_detail' product.slug %}" class="tt">Подробнее</a>
+                            <img src="{{ products.image.url }}" alt="{{ products.name }}">
+                            <h3>{{ products.name }}</h3>
+                            <p class="price">{{ products.price }} BYN</p>
+                            <br />
+                            <a onclick="window.location.href='/product'" class="tt">Подробнее</a>
                         </div>
                     </div>
                     {% endfor %}
@@ -84,16 +102,16 @@
         <hr>
 
 
-        <!-- КАТЕГОРИИ -->
+
         <section class="categories">
-            <h2>📂 Категории</h2>
+            <h2> Категории</h2>
             <div class="categories-grid">
                 {% for category in categories %}
-                <a href="{% url 'shop:category_products' category.slug %}" class="category-card">
+                <a href="{% url 'shop:categories_products' category.slug %}" class="category-card">
                     <div class="category-image">
-                        <img src="{{ category.image.url }}" alt="{{ category.name }}">
+                        <img src="{{ categories.image.url }}" alt="{{ categories.name }}">
                     </div>
-                    <span class="category-name">{{ category.name }}</span>
+                    <span class="category-name">{{ categories.name }}</span>
                 </a>
                 {% endfor %}
             </div>
@@ -102,59 +120,7 @@
         {% endblock %}
     </main>
 
+    <header class=" pppp"> </header>
 
-    <header class=" pp">
-        <nav>
-            <!-- КНОПКА ОТКРЫТИЯ ФИЛЬТРА -->
-            <button class="filter-open-btn">🔍 Фильтры</button>
-
-                <!-- ФИЛЬТРАЦИЯ -->
-                <div class="filter-modal" id="filterModal">
-                    <div class="filter-content">
-
-                        <span class="filter-close">&times;</span>
-
-                        <h2>Фильтрация товаров</h2>
-
-                        <form method="get">
-
-                            <label>Категория:</label>
-                            <select name="category">
-                                <option value="">Все</option>
-                                {% for cat in categories %}
-                                <option value="{{ cat.slug }}"
-                                        {% if selected_category= =cat.slug %}selected{% endif %}>
-                                    {{ cat.name }}
-                                </option>
-                                {% endfor %}
-                            </select>
-
-                            <label>Цена от:</label>
-                            <input type="number" name="min_price" value="{{ min_price }}">
-
-                            <label>Цена до:</label>
-                            <input type="number" name="max_price" value="{{ max_price }}">
-
-                            <button type="submit" class="apply-btn">Применить</button>
-                        </form>
-                    </div>
-                </div>
-
-                <script>
-                    const modal = document.getElementById("filterModal");
-                    const openBtn = document.querySelector(".filter-open-btn");
-                    const closeBtn = document.querySelector(".filter-close");
-
-                    openBtn.onclick = () => modal.style.display = "flex";
-                    closeBtn.onclick = () => modal.style.display = "none";
-
-                    window.onclick = (e) => {
-                        if (e.target === modal) modal.style.display = "none";
-                    };
-                </script>
-           
-                <button class="filter-open-btn">🛒 Корзина</button>
-        </nav>
-    </header>
 </body>
 </html>

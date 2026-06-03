@@ -1,0 +1,54 @@
+﻿<!DOCTYPE html>
+
+{% load static %}
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>{% block title %}Онлайн - Магазин{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+    <link rel="stylesheet" href="{{ request.url_for('static', path='/css/style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <title></title>
+</head>
+<body>
+
+    <div class="user-info" style=" text-align: center; ">
+        {{ request.user.username }}
+    </div>
+
+    {% extends "shop/base.html" %}
+
+    {% block title %}{{ products.name }}{% endblock %}
+
+    {% block content %}
+    <header class=" pp">
+        <h1><a class=" ppp">{{ products.name }}</a></h1>
+    </header>
+
+    <p>{{ products.description }}</p>
+    <p><strong>{{ products.price }} BYN</strong></p>
+
+    <form action="{% url 'shop:cart_add' products.id %}" method="post">
+        {% csrf_token %}
+        <label>
+            <br />
+            Количество:
+            <input type="number" name="quantity" value="1" min="1">
+        </label>
+        <br />
+        <button class="del">Добавить в корзину</button>
+    </form>
+    {% endblock %}
+    <hr>
+
+    <header class=" pppp">
+        <nav>
+
+            <button onclick="window.location.href='/list'" class="filter-open-btn">Назад</button>
+
+        </nav>
+    </header>
+
+</body>
+</html>

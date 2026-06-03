@@ -1,0 +1,59 @@
+﻿<!DOCTYPE html>
+
+{% load static %}
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>{% block title %}Онлайн - Магазин{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+    <link rel="stylesheet" href="{{ request.url_for('static', path='/css/style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <title></title>
+</head>
+    {% extends "admin/base_site.html" %}
+
+    {% block content %}
+<body>
+    <div class="user-info" style=" text-align: center; ">
+        {{ request.user.username }}
+    </div>
+
+    <header class=" pp">
+        <h1><a class=" ppp">Админ-панель</a></h1>
+    </header>
+
+    <header class=" pppp">
+        <nav class="nav">
+
+            <button onclick="window.location.href='/index'" class="filter-open-btn">Главная</button>
+
+            <button onclick="window.location.href='/list'" class="filter-open-btn">Каталог</button>
+
+        </nav>
+    </header>
+
+    <h2>Статистика магазина</h2>
+
+    <p>Всего заказов: <strong>{{ order_items.quantity }}</strong></p>
+    <p>Общая выручка: <strong>{{ orders.total }} BYN</strong></p>
+    {% endblock %}
+
+    <hr>
+
+    <div style=" text-align: center; ">
+        <button onclick="window.location.href='/spisok'" class="filter-open-btn" style=" background-color: #c98bbd">Список товаров</button>
+
+        <button onclick="window.location.href='/zakaz'" class="filter-open-btn" style=" background-color: #c98bbd">Заказы</button>
+    </div>
+
+    <header class=" pppp">
+        <nav>
+
+            <button onclick="window.location.href='/auth'" class="filter-open-btn">Выйти</button>
+
+        </nav>
+    </header>
+
+</body>
+</html>

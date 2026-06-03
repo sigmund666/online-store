@@ -1,0 +1,115 @@
+﻿<!DOCTYPE html>
+
+{% load static %}
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>{% block title %}Онлайн - Магазин{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+    <link rel="stylesheet" href="{{ request.url_for('static', path='/css/style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <title></title>
+</head>
+<body>
+
+    <div class="user-info" style=" text-align: center; ">
+        {{ request.user.username }}
+    </div>
+
+    <header class=" pp">
+        <h1><a class=" ppp">Заказы</a></h1>
+    </header>
+
+    <header class=" pppp">
+        <nav>
+
+            <button class="filter-open-btn"> Фильтры</button>
+
+
+            <div class="filter-modal" id="filterModal">
+                <div class="filter-content">
+
+                    <span class="filter-close">&times;</span>
+
+                    <h2>Фильтрация товаров</h2>
+
+                    <form method="get" class="filters">
+
+                        <div class="filter-block">
+                            <label>Дата от:</label>
+                            <input type="date" name="date_from" value="{{ date_from }}">
+                        </div>
+
+                        <div class="filter-block">
+                            <label>Дата до:</label>
+                            <input type="date" name="date_to" value="{{ date_to }}">
+                        </div>
+
+                        <div class="filter-block">
+                            <label>Активность:</label>
+                            <select name="activity">
+                                <option value="">Все</option>
+                                <option value="active" {% if activity= ="active" %}selected{% endif %}>Активные</option>
+                                <option value="inactive" {% if activity= ="inactive" %}selected{% endif %}>Неактивные</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn-filter">Фильтровать</button>
+                    </form>
+                </div>
+            </div>
+
+            <script>
+                const modal = document.getElementById("filterModal");
+                const openBtn = document.querySelector(".filter-open-btn");
+                const closeBtn = document.querySelector(".filter-close");
+
+                openBtn.onclick = () => modal.style.display = "flex";
+                closeBtn.onclick = () => modal.style.display = "none";
+
+                window.onclick = (e) => {
+                    if (e.target === modal) modal.style.display = "none";
+                };
+            </script>
+
+            <button onclick="window.location.href='/admin'" class="filter-open-btn"> Назад</button>
+
+        </nav>
+    </header>
+
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th class="table-thead">ID</th>
+                <th class="table-thead">Дата</th>
+                <th class="table-thead">Статус</th>
+                <th class="table-thead">Сумма</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for order in orders %}
+            <tr>
+                <td class="table-td">{{ order.id }}</td>
+                <td class="table-td">{{ order.created_at|date:"d.m.Y H:i" }}</td>
+                <td class="table-td">
+                    {% if order.is_active %}
+                    Активный
+                    {% else %}
+                    Неактивный
+                    {% endif %}
+                </td>
+                <td class="table-td">{{ orders.total }} BYN</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4" class="table-td">Заказов не найдено</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</body>
+</html>

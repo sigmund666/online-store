@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 {% block title %}Каталог{% endblock %}
 {% block content %}
     <h2>Каталог товаров</h2>
@@ -18,8 +19,10 @@
     <div class="product-grid">
         {% for product in page_obj %}
             <div class="product-card">
-                {% if product.image %}
-                    <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                {% if product.image_url %}
+                    <img src="{{ product.image_url }}" alt="{{ product.name }}">
+                {% else %}
+                    <img src="{% static 'no_image.svg' %}" alt="Нет изображения">
                 {% endif %}
                 <h3>{{ product.name }}</h3>
                 <p class="price">{{ product.price }} BYN</p>

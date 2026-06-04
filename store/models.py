@@ -23,6 +23,16 @@ class Product (models .Model ):
     image =models .ImageField (upload_to ='products/',blank =True ,null =True ,verbose_name ='Изображение')
     is_active =models .BooleanField (default =True ,verbose_name ='Активен')
 
+    @property
+    def image_url(self):
+        if self.image and self.image.name:
+            try:
+                if self.image.storage.exists(self.image.name):
+                    return self.image.url
+            except Exception:
+                return None
+        return None
+
     def __str__ (self ):
         return self .name 
 

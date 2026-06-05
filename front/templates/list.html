@@ -3,7 +3,7 @@
 {% block title %}Каталог{% endblock %}
 {% block content %}
     <h2>Каталог товаров</h2>
-    <form method="get" class="search-bar">
+    <form method="get" class="search-bar" id="filter-form">
         <input type="text" name="q" placeholder="Поиск..." value="{{ search_query }}">
         <select name="category">
             <option value="">Все категории</option>
@@ -11,10 +11,38 @@
                 <option value="{{ category.id }}" {% if selected_category == category.id|stringformat:"s" %}selected{% endif %}>{{ category.name }}</option>
             {% endfor %}
         </select>
-        <input type="number" name="min_price" placeholder="Цена от" value="{{ min_price }}">
-        <input type="number" name="max_price" placeholder="Цена до" value="{{ max_price }}">
+        <input type="number" name="min_price" placeholder="Цена от" value="{{ min_price }}" min="0.01" step="0.01">
+        <input type="number" name="max_price" placeholder="Цена до" value="{{ max_price }}" min="0.01" step="0.01">
         <button type="submit" class="poisk">Найти</button>
     </form>
+
+    <script>
+        document.getElementById('filter-form').addEventListener('submit', function(e) {
+            const minPrice = document.querySelector('input[name="min_price"]').value;
+            const maxPrice = document.querySelector('input[name="max_price"]').value;
+            
+            // Проверка минимальной цены
+            if (minPrice && (parseFloat(minPrice) <= 0)) {
+                e.preventDefault();
+                alert('Минимальная цена должна быть больше 0');
+                return false;
+            }
+            
+            // Проверка максимальной цены
+            if (maxPrice && (parseFloat(maxPrice) <= 0)) {
+                e.preventDefault();
+                alert('Максимальная цена должна быть больше 0');
+                return false;
+            }
+            
+            // Проверка, что минимальная цена не больше максимальной
+            if (minPrice && maxPrice && (parseFloat(minPrice) > parseFloat(maxPrice))) {
+                e.preventDefault();
+                alert('Минимальная цена не может быть больше максимальной');
+                return false;
+            }
+        });
+    </script>
 
     <div class="product-grid">
         {% for product in page_obj %}

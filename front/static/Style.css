@@ -20,6 +20,18 @@
     z-index: 100;
 }
 
+footer.pppp {
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    margin-right: 0;
+    padding-top: 5px !important;
+    padding-bottom: 5px !important;
+    margin-top: 50px;
+}
+
+body {
+}
+
 
 /*  index    баннер  */
 

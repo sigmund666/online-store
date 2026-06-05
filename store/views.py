@@ -89,7 +89,7 @@ def login_view(request):
             if user:
                 login(request, user)
                 return redirect('shop:index')
-        error = 'еверный email или пароль.'
+        error = 'Неверный email или пароль.'
     return render(request, 'auth.html', {'error': error})
 
 
